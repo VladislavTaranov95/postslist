@@ -36,7 +36,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped>
 .container {
   width: 800px;
   margin: 0 auto;
@@ -49,6 +49,7 @@ export default {
 
 .post {
   margin-top: 15px;
+  border-radius: 5px;
   border: 1px solid grey;
   padding: 15px;
 }

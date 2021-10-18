@@ -16,14 +16,33 @@
       </div>
     </nav>
 
+    <div v-if="loggedIn">
+      <div class="app__btn-create-post">
+        <el-button type="primary" plain @click="showDialog">Add post</el-button>
+      </div>
+
+      <el-dialog v-model="dialogVisible" title="Create new post" width="30%">
+        <post-form></post-form>
+      </el-dialog>
+    </div>
+
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import PostForm from "@/views/PostForm";
+
 export default {
   name: "App",
-  components: {},
+  data() {
+    return {
+      dialogVisible: false
+    };
+  },
+  components: {
+    PostForm
+  },
   computed: {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
@@ -36,6 +55,9 @@ export default {
     logOut() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/login");
+    },
+    showDialog() {
+      this.dialogVisible = true;
     }
   }
 };
@@ -50,6 +72,12 @@ body {
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   color: #2c3e50;
+  width: 800px;
+  margin: 0 auto;
+}
+
+.app__btn-create-post {
+  margin-top: 15px;
 }
 
 .header {

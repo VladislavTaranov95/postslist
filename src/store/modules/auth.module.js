@@ -1,5 +1,4 @@
-import axios from "axios";
-import authHeader from "@/services/auth.service";
+import service from "@/helpers/api";
 
 export const auth = {
   namespaced: true,
@@ -11,8 +10,8 @@ export const auth = {
   },
   actions: {
     login({ commit }, user) {
-      return axios
-        .post("http://51.158.179.21/api/v1/auth", {
+      return service
+        .post("auth", {
           email: user.email,
           password: user.password
         })
@@ -20,11 +19,8 @@ export const auth = {
           if (response.data.token) {
             localStorage.setItem("user", JSON.stringify(response.data));
           }
-          console.log(authHeader());
 
-          return axios.get("http://51.158.179.21/api/v1/auth/user", {
-            headers: authHeader()
-          });
+          return service.get("auth/user");
         })
         .then(
           user => {
@@ -39,8 +35,8 @@ export const auth = {
         );
     },
     register({ commit }, user) {
-      return axios
-        .post("http://51.158.179.21/api/v1/users", {
+      return service
+        .post("users", {
           email: user.email,
           password: user.password,
           name: user.name
