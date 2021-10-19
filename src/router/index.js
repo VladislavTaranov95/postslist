@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
-import PostList from "../views/PostList";
+import Main from "../pages/Main.vue";
 
 const routes = [
   {
     path: "/",
-    name: "Posts",
-    component: PostList
+    name: "Main",
+    component: Main
   },
   {
     path: "/register",

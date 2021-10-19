@@ -1,38 +1,52 @@
 <template>
-  <div class="container">
-    <div class="post" v-for="post in posts" :key="post.id">
-      <div><strong>Title:</strong> {{ post.title }}</div>
-      <div><strong>Description:</strong> {{ post.description }}</div>
-      <div class="post-btn">
-        <el-button type="danger" plain>Delete</el-button>
-      </div>
+  <div>
+    <div class="container">
+      <post-item
+        class="post"
+        v-for="post in posts"
+        :key="post.id"
+        :post="post"
+        @remove="deletePost"
+      >
+      </post-item>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import PostItem from "./PostItem.vue";
+import { ElMessage } from "element-plus";
+import { mapState } from "vuex";
 
 export default {
+  components: { PostItem },
   data() {
     return {};
   },
   methods: {
-    ...mapActions({
-      fetchPosts: "posts/fetchPosts"
-    })
-  },
-  mounted() {
-    this.fetchPosts();
-  },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
+    deletePost(id) {
+      this.$store.dispatch("posts/deletePost", id).then(
+        () => {
+          ElMessage.success({
+            center: true,
+            message: "Post has been deleted!",
+          });
+        },
+        (error) => {
+          ElMessage.error({
+            center: true,
+            message: error,
+          });
+        }
+      );
     },
+  },
+  mounted() {},
+  computed: {
     ...mapState({
-      posts: state => state.posts.posts
-    })
-  }
+      posts: (state) => state.posts.posts,
+    }),
+  },
 };
 </script>
 
@@ -52,11 +66,5 @@ export default {
   border-radius: 5px;
   border: 1px solid grey;
   padding: 15px;
-}
-
-.post-btn {
-  margin-top: 10px;
-  display: flex;
-  justify-content: flex-end;
 }
 </style>

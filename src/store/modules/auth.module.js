@@ -1,12 +1,17 @@
 import service from "@/helpers/api";
 
+// const user = ;
+const token = localStorage.getItem("token");
+const user = JSON.parse(localStorage.getItem("user"));
+const info =
+  user && token
+    ? { isAuth: true, userInfo: user }
+    : { isAuth: false, userInfo: null };
+
 export const auth = {
   namespaced: true,
   state: {
-    status: {
-      loggedIn: false
-    },
-    user: null
+    authInfo: info
   },
   actions: {
     login({ commit }, user) {
@@ -17,14 +22,15 @@ export const auth = {
         })
         .then(response => {
           if (response.data.token) {
-            localStorage.setItem("user", JSON.stringify(response.data));
+            localStorage.setItem("token", JSON.stringify(response.data.token));
           }
 
           return service.get("auth/user");
         })
         .then(
           user => {
-            commit("loginSuccess", user);
+            localStorage.setItem("user", JSON.stringify(user.data));
+            commit("loginSuccess", user.data);
 
             return Promise.resolve(user);
           },
@@ -53,28 +59,29 @@ export const auth = {
         );
     },
     logout({ commit }) {
+      localStorage.removeItem("token");
       localStorage.removeItem("user");
       commit("logout");
     }
   },
   mutations: {
     registerSuccess(state) {
-      state.status.loggedIn = false;
+      state.authInfo.isAuth = false;
     },
     registerFailure(state) {
-      state.status.loggedIn = false;
+      state.authInfo.isAuth = false;
     },
     loginSuccess(state, user) {
-      state.status.loggedIn = true;
-      state.user = user;
+      state.authInfo.isAuth = true;
+      state.authInfo.userInfo = user;
     },
     loginFailure(state) {
-      state.status.loggedIn = false;
-      state.user = null;
+      state.authInfo.isAuth = false;
+      state.authInfo.userInfo = null;
     },
     logout(state) {
-      state.status.loggedIn = false;
-      state.user = null;
+      state.authInfo.isAuth = false;
+      state.authInfo.userInfo = null;
     }
   }
 };

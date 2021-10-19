@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <div id="#app">
     <nav class="header">
       <div class="header__section">
-        <router-link style="border-right: 1px solid #bbb;" to="/"
+        <router-link style="border-right: 1px solid #bbb" to="/"
           >Home</router-link
         >
       </div>
@@ -16,50 +16,28 @@
       </div>
     </nav>
 
-    <div v-if="loggedIn">
-      <div class="app__btn-create-post">
-        <el-button type="primary" plain @click="showDialog">Add post</el-button>
-      </div>
-
-      <el-dialog v-model="dialogVisible" title="Create new post" width="30%">
-        <post-form></post-form>
-      </el-dialog>
-    </div>
+    <h1>Welcome to the postslist!</h1>
 
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import PostForm from "@/views/PostForm";
-
 export default {
-  name: "App",
-  data() {
-    return {
-      dialogVisible: false
-    };
-  },
-  components: {
-    PostForm
-  },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    },
-    currentUser() {
-      return this.$store.state.auth.user.data.name;
-    }
-  },
   methods: {
     logOut() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/login");
     },
-    showDialog() {
-      this.dialogVisible = true;
-    }
-  }
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.authInfo.isAuth;
+    },
+    currentUser() {
+      return this.$store.state.auth.authInfo.userInfo.name;
+    },
+  },
 };
 </script>
 
@@ -74,10 +52,6 @@ body {
   color: #2c3e50;
   width: 800px;
   margin: 0 auto;
-}
-
-.app__btn-create-post {
-  margin-top: 15px;
 }
 
 .header {

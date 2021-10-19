@@ -18,63 +18,64 @@
           >Sign In</el-button
         >
       </el-form-item>
-      <div v-if="message">
-        <el-alert :title="message" type="error" show-icon> </el-alert>
-      </div>
     </el-form>
   </div>
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
+
 export default {
   data() {
     return {
       user: {
         email: "",
-        password: ""
+        password: "",
       },
       rules: {
         email: [
           {
             required: true,
             message: "Please, enter your email",
-            trigger: "blur"
+            trigger: "blur",
           },
           {
             type: "email",
             message: "Please input correct email address",
-            trigger: ["blur", "change"]
-          }
+            trigger: ["blur", "change"],
+          },
         ],
         password: [
           {
             required: true,
             message: "Please, enter your password",
-            trigger: "blur"
+            trigger: "blur",
           },
           {
             min: 5,
             max: 16,
             message: "Length should be 5 to 16",
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
-      message: ""
     };
   },
   computed: {
     loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    }
+      return this.$store.state.auth.authInfo.isAuth;
+    },
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.login();
         } else {
-          console.log("error submit!!");
+          ElMessage.error({
+            center: true,
+            message: "No valid data!",
+          });
           return false;
         }
       });
@@ -84,12 +85,15 @@ export default {
         () => {
           this.$router.push("/");
         },
-        error => {
-          this.message = error.response.data.error;
+        (error) => {
+          ElMessage.error({
+            center: true,
+            message: error.response.data.error,
+          });
         }
       );
-    }
-  }
+    },
+  },
 };
 </script>
 
