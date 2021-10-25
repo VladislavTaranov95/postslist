@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-select
-      v-model="setSelectedSort"
+      v-model="orderBy"
       @change="changeOption"
       filterable
       placeholder="Sort by..."
@@ -10,6 +10,7 @@
         v-for="option in options"
         :key="option.value"
         :value="option.value"
+        :label="option.name"
       >
         {{ option.name }}
       </el-option>
@@ -18,22 +19,27 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 
 export default {
+  data() {
+    return {
+      orderBy: "Sort by...",
+      options: [
+        { value: "title", name: "By title" },
+        { value: "description", name: "By description" },
+      ],
+    };
+  },
   methods: {
-    changeOption(value) {
-      this.$emit("updateModelValue", value);
-    },
     ...mapMutations({
-      setSelectedSort: "posts/setSelectedSort",
+      sortedPosts: "posts/sortedPosts",
     }),
+    changeOption(value) {
+      this.sortedPosts(value);
+    },
   },
-  computed: {
-    ...mapState({
-      options: (state) => state.posts.options,
-    }),
-  },
+  computed: {},
 };
 </script>
 

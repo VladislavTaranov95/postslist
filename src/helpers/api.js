@@ -13,7 +13,6 @@ service.interceptors.request.use(
     const AUTH_TOKEN = authHeader();
     if (AUTH_TOKEN) {
       config.headers.Authorization = AUTH_TOKEN;
-      console.log(AUTH_TOKEN);
     }
     return config;
   },

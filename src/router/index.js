@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Main from "../pages/Main.vue";
+import Profile from "../pages/Profile.vue"
+import ProfileEdit from "../pages/ProfileEdit.vue"
+import Post from "../pages/Post.vue"
+import PostEdit from "../pages/PostEdit.vue"
 
 const routes = [
   {
@@ -18,6 +22,24 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login
+  },
+  {
+    path: '/profile',
+    name: "Profile",
+    component: Profile
+  },
+  {
+    path: '/profile/edit',
+    name: 'ProfileEdit',
+    component: ProfileEdit
+  },
+  {
+    path: '/post/:id',
+    component: Post
+  },
+  {
+    path: '/post/edit/:id',
+    component: PostEdit
   }
 ];
 

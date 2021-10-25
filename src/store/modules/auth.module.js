@@ -11,7 +11,18 @@ const info =
 export const auth = {
   namespaced: true,
   state: {
-    authInfo: info
+    authInfo: info,
+  },
+  getters: {
+    getUser: state => {
+      return state.authInfo.userInfo
+    },
+    getUserAvatar: state => {
+      return "http://51.158.179.21" + state.authInfo.userInfo.avatar
+    },
+    getUserId: state => {
+      return state.authInfo.userInfo._id
+    },
   },
   actions: {
     login({ commit }, user) {
@@ -62,6 +73,33 @@ export const auth = {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       commit("logout");
+    },
+    async editUserPhoto({ state, commit }, payload) {
+      const response = await service.put('/users/upload/' + state.authInfo.userInfo._id, payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      commit('updateUser', response.data)
+      localStorage.setItem("user", JSON.stringify(response.data));
+    },
+    saveProfile({ commit, getters }, data) {
+      return service
+        .patch(`users/${getters.getUserId}`, {
+          name: data.name,
+          profession: data.profession,
+          skills: data.skills
+        })
+        .then(
+          response => {
+            commit("profileSaveSuccess", response.data);
+            return Promise.resolve(response.data);
+          },
+          error => {
+            commit("profileSaveFailure");
+            return Promise.reject(error);
+          }
+        );
     }
   },
   mutations: {
@@ -82,6 +120,13 @@ export const auth = {
     logout(state) {
       state.authInfo.isAuth = false;
       state.authInfo.userInfo = null;
+    },
+    updateUser(state, user) {
+      state.authInfo.userInfo = user;
+    },
+    profileSaveSuccess(state, data) {
+      state.authInfo.userInfo = data;
+      localStorage.setItem("user", JSON.stringify(data));
     }
   }
 };

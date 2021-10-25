@@ -30,6 +30,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^7.0.0",
+    "form-data": "^2.3.3",
     "sass": "^1.27.0",
     "sass-loader": "^10.0.4",
     "vue-cli-plugin-element-plus": "~0.0.13"
