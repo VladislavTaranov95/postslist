@@ -11,6 +11,9 @@ export const posts = {
     filtered: null,
     totalPosts: 0,
     currentPost: null,
+    comments: [],
+    totalUsers: 0,
+    users: []
   },
   getters: {
     getPost: state => {
@@ -21,6 +24,13 @@ export const posts = {
     },
     getCurrentPost: state => {
       return state.currentPost
+    },
+    getUserName: state => id => {
+      const user = state.users.find(
+        (user) => user._id === id
+      );
+      console.log(user)
+      return user?.name
     }
   },
   actions: {
@@ -132,7 +142,34 @@ export const posts = {
           return Promise.reject(error.error);
         }
       )
-    }
+    },
+    async getPostComments({ commit }, postId) {
+      return service.get(`comments/post/${postId}`).then(
+        (response) => {
+          commit("setComments", response.data)
+          console.log(response.data)
+          return Promise.resolve(response.data);
+        },
+        error => {
+          return Promise.reject(error.error);
+        }
+      )
+    },
+    async getTotalUsers({ commit }) {
+      return service.get('users').then(response => {
+        commit('setTotalUsers', response.data.pagination.total)
+      })
+    },
+    async getAllUsers({ commit, state }) {
+      return service.get('users', {
+        params: {
+          limit: state.totalUsers
+        }
+      }).then(response => {
+        console.log('users', response.data.data)
+        commit('setUsers', [...response.data.data])
+      })
+    },
   },
   mutations: {
     setPosts(state, posts) {
@@ -192,6 +229,17 @@ export const posts = {
           post = { ...data }
         }
       })
+    },
+    setComments(state, data) {
+      state.comments = data
+    },
+    setTotalUsers(state, data) {
+      state.totalUsers = data
+      console.log('total', state.totalUsers)
+    },
+    setUsers(state, data) {
+      state.users = data
+      console.log(state.users)
     }
   }
 };

@@ -20,23 +20,77 @@
         <el-button type="primary" @click="editPost">Edit</el-button>
       </div>
     </el-card>
+    <div style="margin-top: 15px; text-align: center">
+      <strong>Comments</strong>
+    </div>
+    <div class="comment__form">
+      <el-form ref="comment" :model="comment">
+        <el-form-item prop="text">
+          <el-input
+            v-model="comment.text"
+            placeholder="Enter your comment..."
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary">Add</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <div v-if="comments" class="comments">
+      <el-card
+        class="box-card"
+        v-for="comment in toOneLevelArray(comments)"
+        :key="comment._id"
+      >
+        <template #header>
+          <div class="card-header">
+            <span>{{ comment.text }}</span>
+          </div>
+        </template>
+        <div class="text item">
+          {{ new Date(comment.dateCreated).toLocaleString() }}
+        </div>
+        <div class="item__footer">
+          <div class="footer__like" style="margin-top: 10px">
+            <img style="width: 28px; height: 28px" src="@/assets/like.png" />
+          </div>
+          <div style="margin-left: 5px">
+            {{ comment.likes.length }}
+          </div>
+          <div>
+            {{ getName(comment.commentedBy) }}
+          </div>
+        </div>
+      </el-card>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 import { ElMessage } from "element-plus";
 
 export default {
+  components: {},
   data() {
     return {
       isLoading: false,
       post: null,
+      comments: null,
+      dialogVisible: false,
+      comment: {
+        text: "",
+      },
+      name: "",
     };
   },
   computed: {
     ...mapGetters({
       userInfo: "auth/getUser",
+      getUserName: "posts/getUserName",
+    }),
+    ...mapState({
+      users: "posts/users",
     }),
   },
   mounted() {
@@ -44,7 +98,17 @@ export default {
     this.$store.dispatch("posts/getPostById", this.$route.params.id).then(
       (response) => {
         this.post = response.data;
-        this.isLoading = false;
+      },
+      (error) => {
+        ElMessage.error({
+          center: true,
+          message: error.response.data.error,
+        });
+      }
+    );
+    this.$store.dispatch("posts/getPostComments", this.$route.params.id).then(
+      (response) => {
+        this.comments = response;
       },
       (error) => {
         ElMessage.error({
@@ -55,9 +119,35 @@ export default {
     );
   },
   methods: {
+    getName(id) {
+      this.$store.dispatch("auth/getUserName", id).then(
+        (response) => {
+          return response.name;
+        },
+        (error) => {
+          return error.response.data.error;
+        }
+      );
+    },
     editPost() {
       this.$router.push(`/post/edit/${this.post._id}`);
     },
+    toOneLevelArray(arr) {
+      return arr.reduce(
+        (accum, currentVal) =>
+          accum.concat(
+            Array.isArray(currentVal)
+              ? this.toOneLevelArray(currentVal)
+              : currentVal
+          ),
+        []
+      );
+    },
+    ...mapActions({
+      getUserById: "auth/getUserById",
+      getTotalUsers: "posts/getTotalUsers",
+      getAllUsers: "posts/getAllUsers",
+    }),
   },
 };
 </script>
@@ -65,5 +155,43 @@ export default {
 <style scoped>
 .el-breadcrumb {
   margin-bottom: 15px;
+}
+
+.comments {
+  margin-top: 20px;
+}
+
+.comments__item {
+  margin-top: 10px;
+}
+
+.box-card {
+  margin-top: 15px;
+}
+
+.item__content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.item__footer {
+  display: flex;
+  align-items: flex-end;
+}
+
+.footer__like {
+  cursor: pointer;
+}
+
+.footer__like:hover {
+  opacity: 0.8;
+}
+
+.comment__form {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid rgb(192, 192, 192);
+  border-radius: 5px;
 }
 </style>

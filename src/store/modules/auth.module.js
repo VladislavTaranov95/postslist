@@ -100,6 +100,20 @@ export const auth = {
             return Promise.reject(error);
           }
         );
+    },
+    async getUserById({ commit }, userId) {
+      return service.get(`users/${userId}`).then(
+        response => {
+          return response.data;
+        }
+      )
+    },
+    async getUserName({ commit }, id) {
+      return service.get(`users/${id}`).then(
+        response => {
+          return response.data;
+        },
+      )
     }
   },
   mutations: {

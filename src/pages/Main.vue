@@ -6,7 +6,7 @@
 
 <script>
 import PostList from "@/views/PostList";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -16,7 +16,13 @@ export default {
   components: {
     PostList,
   },
-  methods: {},
+  methods: {
+    ...mapActions({
+      getUserById: "auth/getUserById",
+      getTotalUsers: "posts/getTotalUsers",
+      getAllUsers: "posts/getAllUsers",
+    }),
+  },
   computed: {
     loggedIn() {
       return this.$store.state.auth.authInfo.isAuth;
@@ -30,7 +36,11 @@ export default {
       posts: (state) => state.posts.posts,
     }),
   },
-  mounted() {},
+  mounted() {
+    this.getTotalUsers().then((response) => {
+      this.getAllUsers();
+    });
+  },
 };
 </script>
 
