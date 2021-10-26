@@ -1,45 +1,45 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Register from "../views/Register.vue";
-import Login from "../views/Login.vue";
-import Main from "../pages/Main.vue";
-import Profile from "../pages/Profile.vue"
-import ProfileEdit from "../pages/ProfileEdit.vue"
-import Post from "../pages/Post.vue"
-import PostEdit from "../pages/PostEdit.vue"
+import PageUserAuthRegistration from "../pages/PageUserAuthRegistration.vue";
+import PageUserAuthLogin from "../pages/PageUserAuthLogin.vue";
+import PagePosts from "../pages/PagePosts.vue";
+import PageUserProfile from "../pages/PageUserProfile.vue"
+import PageUserProfileEdit from "../pages/PageUserProfileEdit.vue"
+import PagePost from "../pages/PagePost.vue"
+import PagePostEdit from "../pages/PagePostEdit.vue"
 
 const routes = [
   {
     path: "/",
-    name: "Main",
-    component: Main
+    name: "PagePosts",
+    component: PagePosts
   },
   {
     path: "/register",
-    name: "Register",
-    component: Register
+    name: "PageUserAuthRegistration",
+    component: PageUserAuthRegistration
   },
   {
     path: "/login",
-    name: "Login",
-    component: Login
+    name: "PageUserAuthLogin",
+    component: PageUserAuthLogin
   },
   {
     path: '/profile',
-    name: "Profile",
-    component: Profile
+    name: "PageUserProfile",
+    component: PageUserProfile
   },
   {
     path: '/profile/edit',
-    name: 'ProfileEdit',
-    component: ProfileEdit
+    name: 'PageUserProfileEdit',
+    component: PageUserProfileEdit
   },
   {
     path: '/post/:id',
-    component: Post
+    component: PagePost
   },
   {
     path: '/post/edit/:id',
-    component: PostEdit
+    component: PagePostEdit
   }
 ];
 

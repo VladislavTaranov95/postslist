@@ -14,6 +14,12 @@ export const auth = {
     authInfo: info,
   },
   getters: {
+    getUserLogStatus: state => {
+      return state.authInfo.isAuth;
+    },
+    getUserName: state => {
+      return state.authInfo.userInfo.name;
+    },
     getUser: state => {
       return state.authInfo.userInfo
     },
@@ -109,11 +115,12 @@ export const auth = {
       )
     },
     async getUserName({ commit }, id) {
-      return service.get(`users/${id}`).then(
-        response => {
-          return response.data;
-        },
-      )
+      return service.get(`users/${id}`).then(response => {
+        return Promise.resolve(response.data)
+      },
+      error => {
+        return Promise.reject(error)
+      })
     }
   },
   mutations: {

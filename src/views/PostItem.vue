@@ -1,33 +1,22 @@
 <template>
   <div class="post">
-    <el-card class="box-card">
+    <el-card>
       <template #header>
-        <div class="card-header">
-          <h2>{{ post.title }}</h2>
-        </div>
+        <h2>{{ post.title }}</h2>
       </template>
-      <div class="text item">{{ post.description }}</div>
+      <div>{{ post.description }}</div>
       <div class="post__footer">
         <div class="post__likes">
           <div @click="setLike">
             <img style="width: 28px; height: 28px" src="@/assets/like.png" />
           </div>
           <div style="margin-right: 10px">
-            {{ post && post.likes.length }}
+            {{ post.likes.length }}
           </div>
         </div>
         <div class="post-btn">
-          <el-button @click="$router.push(`/post/${this.post._id}`)" plain
-            >Open</el-button
-          >
-          <el-button
-            v-if="post.postedBy === userInfo._id"
-            type="danger"
-            @click="$emit('remove', post._id)"
-            plain
-          >
-            Delete
-          </el-button>
+          <el-button @click="openPost">Open</el-button>
+          <el-button type="danger" @click="deletePost">Delete</el-button>
         </div>
       </div>
     </el-card>
@@ -46,6 +35,25 @@ export default {
     },
   },
   methods: {
+    openPost() {
+      this.$router.push(`/post/${this.post._id}`);
+    },
+    deletePost() {
+      this.$store.dispatch("posts/deletePost", this.post._id).then(
+        () => {
+          ElMessage.success({
+            center: true,
+            message: "Post has been deleted!",
+          });
+        },
+        (error) => {
+          ElMessage.error({
+            center: true,
+            message: error,
+          });
+        }
+      );
+    },
     setLike() {
       const payload = {
         userId: this.userInfo._id,

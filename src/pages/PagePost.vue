@@ -5,63 +5,9 @@
   </el-breadcrumb>
   <div v-if="!post" v-loading="isLoading"></div>
   <div v-else>
-    <el-card>
-      <template #header>
-        <div>
-          <h2>{{ post.title }}</h2>
-          <div>{{ post.description }}</div>
-        </div>
-      </template>
-      <div style="margin-bottom: 20px">{{ post.fullText }}</div>
-      <div style="text-align: right">
-        {{ new Date(post.dateCreated).toLocaleString() }}
-      </div>
-      <div v-if="post.postedBy === userInfo._id">
-        <el-button type="primary" @click="editPost">Edit</el-button>
-      </div>
-    </el-card>
-    <div style="margin-top: 15px; text-align: center">
-      <strong>Comments</strong>
-    </div>
-    <div class="comment__form">
-      <el-form ref="comment" :model="comment">
-        <el-form-item prop="text">
-          <el-input
-            v-model="comment.text"
-            placeholder="Enter your comment..."
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary">Add</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div v-if="comments" class="comments">
-      <el-card
-        class="box-card"
-        v-for="comment in toOneLevelArray(comments)"
-        :key="comment._id"
-      >
-        <template #header>
-          <div class="card-header">
-            <span>{{ comment.text }}</span>
-          </div>
-        </template>
-        <div class="text item">
-          {{ new Date(comment.dateCreated).toLocaleString() }}
-        </div>
-        <div class="item__footer">
-          <div class="footer__like" style="margin-top: 10px">
-            <img style="width: 28px; height: 28px" src="@/assets/like.png" />
-          </div>
-          <div style="margin-left: 5px">
-            {{ comment.likes.length }}
-          </div>
-          <div>
-            {{ getName(comment.commentedBy) }}
-          </div>
-        </div>
-      </el-card>
+    <div>
+      <h2>{{ post.title }}</h2>
+      <div>{{ post.description }}</div>
     </div>
   </div>
 </template>
@@ -119,16 +65,6 @@ export default {
     );
   },
   methods: {
-    getName(id) {
-      this.$store.dispatch("auth/getUserName", id).then(
-        (response) => {
-          return response.name;
-        },
-        (error) => {
-          return error.response.data.error;
-        }
-      );
-    },
     editPost() {
       this.$router.push(`/post/edit/${this.post._id}`);
     },

@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <div class="login">
     <el-form
       ref="user"
       :rules="rules"
       :model="user"
-      class="login-form"
+      class="login__form"
       label-width="120px"
     >
-      <el-form-item label="Email: " prop="email">
+      <el-form-item label="Email:" prop="email">
         <el-input v-model="user.email"></el-input>
       </el-form-item>
-      <el-form-item label="Password: " prop="password">
+      <el-form-item label="Password:" prop="password">
         <el-input v-model="user.password"></el-input>
       </el-form-item>
       <el-form-item>
@@ -61,16 +61,11 @@ export default {
       },
     };
   },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.authInfo.isAuth;
-    },
-  },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.login();
+          this.signIn();
         } else {
           ElMessage.error({
             center: true,
@@ -80,7 +75,7 @@ export default {
         }
       });
     },
-    login(e) {
+    signIn(e) {
       this.$store.dispatch("auth/login", this.user).then(
         () => {
           this.$router.push("/");
@@ -97,10 +92,12 @@ export default {
 };
 </script>
 
-<style scope>
-.login-form {
-  margin: 0 auto;
-  margin-top: 30px;
-  width: 400px;
+<style lang="scss" scope>
+.login {
+  &__form {
+    margin: 0 auto;
+    margin-top: 30px;
+    width: 400px;
+  }
 }
 </style>

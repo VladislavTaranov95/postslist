@@ -147,7 +147,6 @@ export const posts = {
       return service.get(`comments/post/${postId}`).then(
         (response) => {
           commit("setComments", response.data)
-          console.log(response.data)
           return Promise.resolve(response.data);
         },
         error => {
@@ -166,7 +165,6 @@ export const posts = {
           limit: state.totalUsers
         }
       }).then(response => {
-        console.log('users', response.data.data)
         commit('setUsers', [...response.data.data])
       })
     },
