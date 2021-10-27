@@ -1,50 +1,44 @@
 <template>
-  <div>
-    <nav class="header">
-      <div class="header__items">
-        <div v-if="!logStatus">
-          <div class="header__item-left">
-            <base-router-link
-              :route="{ navTo: '/', name: 'Home' }"
-            ></base-router-link>
-            <base-router-link
-              :route="{ navTo: '/login', name: 'Sign In' }"
-            ></base-router-link>
-            <base-router-link :route="{ navTo: '/register', name: 'Sign Up' }">
-            </base-router-link>
-          </div>
-        </div>
-      </div>
+  <div class="base-nav">
+    <nav :class="className">
+      <slot></slot>
     </nav>
   </div>
 </template>
 
 <script>
-import BaseRouterLink from "../views/BaseRouterLink.vue";
 import { mapGetters } from "vuex";
 
 export default {
-  components: {
-    BaseRouterLink,
+  props: {
+    navHeader: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({
       logStatus: "auth/getUserLogStatus",
     }),
+    className() {
+      return {
+        "nav-header": this.navHeader,
+      };
+    },
   },
+  methods: {},
 };
 </script>
 
 <style lang='scss' scoped>
-.header {
+.nav-header {
   height: 50px;
   padding: 10px 15px;
-  &__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &-left {
     display: flex;
-    justify-content: space-between;
-    &-left {
-      display: flex;
-    }
   }
 }
 </style>

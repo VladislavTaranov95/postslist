@@ -1,6 +1,8 @@
 <template>
   <div>
-    <router-link :to="route.navTo">{{ route.name }}</router-link>
+    <router-link :class="className" :to="route.navTo">{{
+      route.name
+    }}</router-link>
   </div>
 </template>
 
@@ -11,12 +13,23 @@ export default {
       type: Object,
       default: () => {},
     },
+    navHeaderLink: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    className() {
+      return {
+        "nav-header-link": this.navHeaderLink,
+      };
+    },
   },
 };
 </script>
 
 <style lang='scss' scoped>
-a {
+.nav-header-link {
   text-decoration: none;
   color: black;
   margin-right: 10px;

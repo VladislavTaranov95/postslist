@@ -1,6 +1,24 @@
 <template>
   <div id="#app">
-    <base-nav></base-nav>
+    <base-nav :navHeader="true">
+      <div>
+        <base-router-link
+          :navHeaderLink="true"
+          :route="{ navTo: '/', name: 'Home' }"
+        ></base-router-link>
+      </div>
+      <div class="nav-header__items-right">
+        <base-router-link
+          :navHeaderLink="true"
+          :route="{ navTo: '/login', name: 'Sign In' }"
+        ></base-router-link>
+        <base-router-link
+          :navHeaderLink="true"
+          :route="{ navTo: '/register', name: 'Sign Up' }"
+        >
+        </base-router-link>
+      </div>
+    </base-nav>
     <router-view></router-view>
   </div>
 </template>
@@ -8,10 +26,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import BaseNav from "./views/BaseNav";
+import BaseRouterLink from "./views/BaseRouterLink.vue";
 
 export default {
   components: {
     BaseNav,
+    BaseRouterLink,
   },
   methods: {
     profileCommandHandler(command) {
@@ -71,35 +91,12 @@ body {
   margin: 0 auto;
 }
 
-nav {
-  margin-bottom: 20px;
-}
-
-.menu {
-  height: 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
-
-  &__home,
-  &__posts {
-    text-decoration: none;
-    color: black;
-    padding: 8px 16px;
-    border-right: 1px solid #bbb;
-  }
-
-  &__users {
-    text-decoration: none;
-    color: black;
-    padding: 8px 16px;
-  }
-
-  &__auth a {
-    text-decoration: none;
-    color: black;
-    margin-right: 15px;
+.nav-header {
+  box-shadow: 0px 5px 19px 0px rgba(34, 60, 80, 0.2);
+  &__items {
+    &-right {
+      display: flex;
+    }
   }
 }
 
