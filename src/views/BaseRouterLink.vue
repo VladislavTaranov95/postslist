@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="base-router-link">
     <router-link :class="className" :to="route.navTo">{{
       route.name
     }}</router-link>

@@ -7,6 +7,7 @@ const info =
   user && token
     ? { isAuth: true, userInfo: user }
     : { isAuth: false, userInfo: null };
+const BASE_URL = "http://51.158.179.21"
 
 export const auth = {
   namespaced: true,
@@ -24,7 +25,7 @@ export const auth = {
       return state.authInfo.userInfo
     },
     getUserAvatar: state => {
-      return "http://51.158.179.21" + state.authInfo.userInfo.avatar
+      return BASE_URL + state.authInfo.userInfo.avatar
     },
     getUserId: state => {
       return state.authInfo.userInfo._id
@@ -114,14 +115,6 @@ export const auth = {
         }
       )
     },
-    async getUserName({ commit }, id) {
-      return service.get(`users/${id}`).then(response => {
-        return Promise.resolve(response.data)
-      },
-      error => {
-        return Promise.reject(error)
-      })
-    }
   },
   mutations: {
     registerSuccess(state) {

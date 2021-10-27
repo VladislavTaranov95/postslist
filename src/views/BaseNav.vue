@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
   props: {
     navHeader: {
@@ -17,9 +15,6 @@ export default {
     },
   },
   computed: {
-    ...mapGetters({
-      logStatus: "auth/getUserLogStatus",
-    }),
     className() {
       return {
         "nav-header": this.navHeader,

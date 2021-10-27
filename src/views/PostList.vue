@@ -91,23 +91,11 @@ export default {
     ...mapMutations({
       setPosts: "posts/setPosts",
     }),
-    loadPosts() {
+    async loadPosts() {
       console.log(this.totalPosts);
       if (this.posts.length < this.totalPosts) {
         this.isLoading = true;
-        this.$store.dispatch("posts/loadMorePosts").then(
-          (response) => {
-            this.isLoading = false;
-          },
-          (error) => {
-            ElMessage.error({
-              center: true,
-              message: error.response.data.error,
-            });
-          }
-        );
-      } else {
-        this.noMore = true;
+        await this.$store.dispatch("posts/loadMorePosts").
       }
     },
     setLoadingObserver() {

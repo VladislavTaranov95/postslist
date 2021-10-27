@@ -70,6 +70,7 @@ export default {
 
 <style scoped>
 .user {
+  margin-top: 20px;
   display: flex;
 }
 

@@ -7,7 +7,7 @@
           :route="{ navTo: '/', name: 'Home' }"
         ></base-router-link>
       </div>
-      <div class="nav-header__items-right">
+      <div v-if="!logStatus" class="nav-header__items-right">
         <base-router-link
           :navHeaderLink="true"
           :route="{ navTo: '/login', name: 'Sign In' }"
@@ -17,6 +17,44 @@
           :route="{ navTo: '/register', name: 'Sign Up' }"
         >
         </base-router-link>
+      </div>
+      <div v-else class="profile">
+        <div class="profile__username">
+          <el-dropdown trigger="click" @command="handleCommand">
+            <span class="profile__title">
+              Welcome, {{ userName }}
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu class="profile__menu">
+                <el-dropdown-item>
+                  <div class="profile__avatar">
+                    <img
+                      v-if="userAvatar"
+                      :src="userAvatar"
+                      style="width: 100px; height: 100px"
+                    />
+                    <input
+                      type="file"
+                      name="import_file"
+                      v-on:change="selectedFile($event)"
+                    />
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item class="profile__menu-btn-profile">
+                  <base-router-link
+                    :navHeaderLink="true"
+                    :route="{ navTo: '/profile', name: 'Your profile' }"
+                    >Your profile</base-router-link
+                  >
+                </el-dropdown-item>
+                <el-dropdown-item command="logOut" divided
+                  >Sign Out</el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
       </div>
     </base-nav>
     <router-view></router-view>
@@ -58,23 +96,14 @@ export default {
     ...mapActions({
       editUserPhoto: "auth/editUserPhoto",
     }),
-    ...mapActions({
-      fetchPosts: "posts/fetchPosts",
-      loadMorePosts: "posts/loadMorePosts",
-    }),
   },
   computed: {
     ...mapGetters({
       logStatus: "auth/getUserLogStatus",
       userName: "auth/getUserName",
+      userAvatar: "auth/getUserAvatar",
     }),
-    getUserAvatar() {
-      return (
-        "http://51.158.179.21" + this.$store.state.auth.authInfo.userInfo.avatar
-      );
-    },
   },
-  mounted() {},
 };
 </script>
 
@@ -103,12 +132,21 @@ body {
 .profile {
   display: flex;
 
+  &__title {
+    cursor: pointer;
+    color: black;
+  }
+
   &__username {
     padding: 8px 16px;
   }
 
   &__menu {
     text-align: center;
+
+    &-btn-profile {
+      margin-top: 20px;
+    }
   }
 
   &__avatar {
@@ -116,43 +154,11 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    & input {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
   }
-}
-
-.profile__avatar input {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.profile__menu-btn-profile {
-  margin-top: 20px;
-}
-
-.profile__link {
-  cursor: pointer;
-  color: #409eff;
-}
-
-.avatar-uploader {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.avatar-uploader-icon {
-  font-size: 74px;
-  color: #8c939d;
-  width: 100px;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.avatar {
-  width: 100px;
-  height: 100px;
-  display: block;
 }
 </style>

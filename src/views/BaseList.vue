@@ -1,45 +1,37 @@
 <template>
-  <div class="list">
-    <div v-if="isArrayPosts" class="list__posts">
-      <post-item
-        v-for="post in array"
-        :key="post._id"
-        class="post"
-        :post="post"
-        @remove="deletePost"
-      >
-      </post-item>
-    </div>
+  <div class="base-list">
+    <base-list-item
+      v-for="item in array"
+      :key="item._id"
+      :item="item"
+      :type="'posts'"
+    >
+    </base-list-item>
   </div>
 </template>
 
 <script>
-import PostItem from "@/views/PostItem";
+import BaseListItem from "@/views/BaseListItem";
 
 export default {
   components: {
-    PostItem,
+    BaseListItem,
   },
   props: {
     array: {
       type: Array,
       default: () => [],
     },
-    isArrayPosts: {
-      type: Boolean,
-      default: false,
-    },
-    isArrayUsers: {
-      type: Boolean,
-      default: false,
+    list: {
+      type: String,
+      default: "None",
     },
   },
-  methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
-.post {
+.base-list {
   margin-top: 20px;
 }
 </style>

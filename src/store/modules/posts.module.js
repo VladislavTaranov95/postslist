@@ -118,15 +118,13 @@ export const posts = {
         return Promise.resolve(data);
       })
     },
-    async setLikeToPost(context, id) {
-      return service.put(`posts/like/${id}`).then(
-        response => {
-          return Promise.resolve(response);
-        },
-        error => {
-          return Promise.reject(error.error);
-        }
-      )
+    async setLikeToPost({ commit }, data) {
+      try {
+        await service.put(`posts/like/${data.postId}`)
+        commit('setLike', data)
+      } catch (error) {
+        console.log(error)
+      }
     },
     async savePost({ commit }, post) {
       return service.patch(`posts/${post._id}`, {
@@ -219,7 +217,6 @@ export const posts = {
           }
         }
       })
-      console.log(state.posts)
     },
     updatePost(state, data) {
       state.posts.forEach(post => {

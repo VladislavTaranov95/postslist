@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-list :array="posts" :isArrayPosts="true"></base-list>
+    <base-list :array="posts"></base-list>
   </div>
 </template>
 
