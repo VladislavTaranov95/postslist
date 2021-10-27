@@ -1,27 +1,25 @@
 <template>
-  <div class="base-list-item">
-    <div v-if="type === 'posts'">
-      <el-card class="post">
-        <template #header>
-          <h2>{{ item.title }}</h2>
-        </template>
-        <div>{{ item.description }}</div>
-        <div class="post__footer">
-          <div class="post__likes">
-            <div @click="setPostLike">
-              <img style="width: 28px; height: 28px" src="@/assets/like.png" />
-            </div>
-            <div style="margin-right: 10px">
-              {{ item.likes.length }}
-            </div>
+  <div class="post">
+    <el-card>
+      <template #header>
+        <h2>{{ post.title }}</h2>
+      </template>
+      <div>{{ post.description }}</div>
+      <div class="post__footer">
+        <div class="post__likes">
+          <div @click="setPostLike">
+            <img style="width: 28px; height: 28px" src="@/assets/like.png" />
           </div>
-          <div class="post-btn">
-            <el-button @click="openPost">Open</el-button>
-            <el-button type="danger" @click="deletePost">Delete</el-button>
+          <div style="margin-right: 10px">
+            {{ post.likes.length }}
           </div>
         </div>
-      </el-card>
-    </div>
+        <div class="post-btn">
+          <el-button @click="openPost">Open</el-button>
+          <el-button type="danger" @click="deletePost">Delete</el-button>
+        </div>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -30,27 +28,35 @@ import { ElMessage } from "element-plus";
 import { mapGetters } from "vuex";
 
 export default {
+  name: "PostItem",
   props: {
-    item: {
+    post: {
       type: Object,
       default: () => {},
-    },
-    type: {
-      type: String,
-      default: "None",
     },
   },
   methods: {
     openPost() {
-      this.$router.push(`/post/${this.item._id}`);
+      this.$router.push(`/post/${this.post._id}`);
     },
     async deletePost() {
-      await this.$store.dispatch("posts/deletePost", this.item._id);
+      try {
+        await this.$store.dispatch("posts/deletePost", this.post._id);
+        ElMessage.success({
+          center: true,
+          message: "Post has been deleted.",
+        });
+      } catch (error) {
+        ElMessage.error({
+          center: true,
+          message: error,
+        });
+      }
     },
     setPostLike() {
       const payload = {
         userId: this.userInfo._id,
-        postId: this.item._id,
+        postId: this.post._id,
       };
 
       this.$store.dispatch("posts/setLikeToPost", payload).then(
